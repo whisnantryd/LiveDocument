@@ -11,15 +11,14 @@ srv.listen(50000);
 
 /* web server */
 function handler (req, res) {
-    fs.readFile(__dirname + '/example.html',
-        function (err, data) {
-            if (err) {
-              res.writeHead(500);
-              return res.end('Error loading example.html');
-            }
-            
-            res.writeHead(200);
-            res.end(data);
+    fs.readFile(__dirname + '/example.html', function (err, data) {
+        if (err) {
+          res.writeHead(500);
+          return res.end('Error loading example.html');
+        }
+        
+        res.writeHead(200);
+        res.end(data);
     });
 }
 
@@ -40,9 +39,9 @@ app.options('/', function(req, res) {
 });
 
 app.all('/update/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	next();
  });
 
 app.post('/update/:filename', function(req, res) {
