@@ -27,6 +27,12 @@ io.sockets.on('connection', function (socket) {
 	for (var i in files){
 		socket.emit(i, files[i]);
 	}
+	
+	clientCount++;
+	
+	socket.on('disconnect', function () {
+		clientCount--;
+	});
 });
 
 /* rest server */
@@ -38,11 +44,16 @@ app.options('/', function(req, res) {
 	res.end('');
 });
 
-app.all('/update/', function(req, res, next) {
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();
- });
+app.all('/', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+app.get('/clients/count', function(req, res) {
+	res.writeHead(200);
+	res.end({ ClientCount : clientCount });
+});
 
 app.post('/update/:filename', function(req, res) {
 	console.log('update ' + req.params.filename);
@@ -61,10 +72,6 @@ app.post('/update/:filename', function(req, res) {
 })
 
 app.listen(50001);
-
-
-
-
 
 
 
