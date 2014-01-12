@@ -24,15 +24,15 @@ function handler (req, res) {
 
 /* web socket/ajax fallback */
 io.sockets.on('connection', function (socket) {
-	for (var i in files){
-		socket.emit(i, files[i]);
-	}
-	
 	clientCount++;
 	
 	socket.on('disconnect', function () {
 		clientCount--;
 	});
+	
+	for (var i in files){
+		socket.emit(i, files[i]);
+	}
 });
 
 /* rest server */
