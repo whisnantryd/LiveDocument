@@ -6,6 +6,7 @@ var express = require('express');
 var app = express();
 
 var files = {};
+var clientCount = 0;
 
 srv.listen(50000);
 
@@ -36,15 +37,9 @@ io.sockets.on('connection', function (socket) {
 });
 
 /* rest server */
-app.use(express.basicAuth('user', 'password'));
+/* app.use(express.basicAuth('user', 'password')); */
 
-app.options('/', function(req, res) {
-	res.header("Access-Control-Allow-Origin", req.headers.origin);
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	res.end('');
-});
-
-app.all('/', function(req, res, next) {
+app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
@@ -52,7 +47,7 @@ app.all('/', function(req, res, next) {
 
 app.get('/clients/count', function(req, res) {
 	res.writeHead(200);
-	res.end({ ClientCount : clientCount });
+	res.end(JSON.stringify({ ClientCount : clientCount }));
 });
 
 app.post('/update/:filename', function(req, res) {
