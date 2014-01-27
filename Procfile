@@ -1,1 +1,1 @@
-web: node livedocument.js
+web: node livefile.js
