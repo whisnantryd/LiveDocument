@@ -1,0 +1,15 @@
+{
+	"name": "LiveDocument",
+	"version": "0.0.1",
+	"description": "Broadcast data to websocket clients",
+	"main": "livedocument.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Nathan McCann",
+	"license": "public",
+	"dependencies": {
+		"express": "latest",
+		"socket.io": "latest"
+	}
+}
