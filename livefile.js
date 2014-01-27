@@ -1,26 +1,19 @@
-var srv = require('http').createServer(handler);
-var io = require('socket.io').listen(srv);
-var fs = require('fs')
-
 var express = require('express');
 var app = express();
+
+var srv = require('http').createServer(app);
+var io = require('socket.io').listen(srv, { log : false });
+
+var fs = require('fs')
 
 var files = {};
 var clientCount = 0;
 
-srv.listen(50000);
-
-/* web server */
-function handler (req, res) {
-    fs.readFile(__dirname + '/example.html', function (err, data) {
-        if (err) {
-          res.writeHead(500);
-          return res.end('Error loading example.html');
-        }
-        
-        res.writeHead(200);
-        res.end(data);
-    });
+if(undefined == process.argv[2]){
+	srv.listen(50000);
+}
+else{
+	srv.listen(process.argv[2]);
 }
 
 /* web socket/ajax fallback */
@@ -45,14 +38,24 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+app.get('/', function(req, res) {
+	fs.readFile(__dirname + '/example.html', function (err, data) {
+        if (err) {
+          res.writeHead(500);
+          return res.end('Error loading example.html');
+        }
+        
+        res.writeHead(200);
+        res.end(data.toString().replace(/PORTNUMBER/g, srv.address().port));
+    });
+});
+
 app.get('/clients/count', function(req, res) {
 	res.writeHead(200);
 	res.end(JSON.stringify({ ClientCount : clientCount }));
 });
 
 app.post('/update/:filename', function(req, res) {
-	console.log('update ' + req.params.filename);
-	
 	req.on('data', function(data) {
 		var datastring = data.toString();	
 		
@@ -65,9 +68,3 @@ app.post('/update/:filename', function(req, res) {
 		res.end();
 	});
 })
-
-app.listen(50001);
-
-
-
-
