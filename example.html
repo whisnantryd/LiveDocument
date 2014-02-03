@@ -3,13 +3,18 @@
         <script src="http://xyz/socket.io/socket.io.js"></script>
         <script>
 			var socket = io.connect('http://xyz/');
-			socket.on('news', function (data) {
-				console.log(data);
-			});
 			
-			socket.on('results', function (data) {
-				console.log(data);
-				document.getElementById('results').innerHTML = data;
+			socket.on('data', function (data) {
+				var objData = JSON.parse(data);
+				
+				if(objData.debug) {
+					document.getElementById('data').innerText = data;
+				}
+				else {
+					document.getElementById('data').innerText = '';
+				}
+				
+				document.getElementById('payload').innerHTML = objData.payload;
 			});
         </script>
     </head>
