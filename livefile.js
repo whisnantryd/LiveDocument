@@ -12,12 +12,7 @@ var users = {}
 users['test'] = {password : 'test'}
 users['webroot'] = {password : 'a'}
 
-if(undefined == process.argv[2]){
-	srv.listen(50000);
-}
-else{
-	srv.listen(process.argv[2]);
-}
+srv.listen(process.argv[2] || 50000);
 
 /* web socket/ajax fallback */
 io.sockets.on('connection', function (socket) {
